@@ -1,0 +1,29 @@
+clubs (♣)
+diamonds (♦)
+hearts (♥)
+spades (♠) 
+
+ ChangeNotifierProvider.value(value: PlayerHand()),
+        ChangeNotifierProvider.value(value: DealerHand()),
+        ProxyProvider2<PlayerHand, DealerHand, GameState>(
+            update: (BuildContext context, ph, dh, _) {
+          if (ph.burnt) {
+            return GameState.DEALER_WON;
+          } else if (!ph.done || !dh.done) {
+            return GameState.PLAY;
+          } else if (dh.burnt && !ph.burnt) {
+            return GameState.PLAYER_WON;
+          } else if (ph.blackjack && dh.blackjack) {
+            return GameState.EQUAL;
+          } else if (ph.blackjack && !dh.blackjack) {
+            return GameState.PLAYER_WON;
+          } else if (!ph.blackjack && dh.blackjack) {
+            return GameState.DEALER_WON;
+          } else if ((21 - ph.sum) < (21 - dh.sum)) {
+            return GameState.PLAYER_WON;
+          } else if ((21 - ph.sum) == (21 - dh.sum)) {
+            return GameState.EQUAL;
+          } else {
+            return GameState.DEALER_WON;
+          }
+        })
