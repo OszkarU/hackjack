@@ -18,23 +18,26 @@ class FrontCard extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-    return Container(
-        height: 120,
-        width: 80,
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              card.type,
-              style: TextStyle(color: Colors.black),
-            ),
-            getSuit(),
-            Text(
-              card.type,
-              style: TextStyle(color: Colors.black),
-            )
-          ],
-        ));
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(5),
+      child: Container(
+          height: 120,
+          width: 80,
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                card.type,
+                style: TextStyle(color: Colors.black),
+              ),
+              getSuit(),
+              Text(
+                card.type,
+                style: TextStyle(color: Colors.black),
+              )
+            ],
+          )),
+    );
   }
 }

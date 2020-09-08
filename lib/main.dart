@@ -64,84 +64,89 @@ class _GameState extends State<Game> {
           }
         })
       ],
-      child: Scaffold(
-        backgroundColor: Colors.green,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Text('Dealer hand'),
-                Consumer<DealerHand>(
-                  builder: (context, hand, child) => HandVisualizer(hand),
-                )
-              ],
-            ),
-            Column(
-              children: [
-                Text('Player hand'),
-                Consumer<PlayerHand>(
-                  builder: (context, hand, child) => HandVisualizer(hand),
-                )
-              ],
-            ),
-            Consumer<GameState>(builder: (context, gs, child) {
-              if (gs == GameState.PLAYER_WON) {
-                return Text('Player won');
-              } else if (gs == GameState.DEALER_WON) {
-                return Text('Dealer won');
-              } else if (gs == GameState.EQUAL) {
-                return Text('Draw');
-              } else
-                return Container();
-            }),
-            Consumer3<GameState, PlayerHand, DealerHand>(
-              builder: (context, gs, ph, dh, _) {
-                var buttons = <Widget>[];
-                if (gs == GameState.PLAY) {
-                  buttons.addAll([
-                    RaisedButton.icon(
-                        onPressed: ph.length == 2
-                            ? () async {
-                                ph.draw();
-                                await Future.delayed(
-                                    Duration(milliseconds: 500));
-                                dh.play();
-                              }
-                            : null,
-                        icon: Icon(Icons.arrow_drop_up),
-                        label: Text('Double')),
-                    RaisedButton.icon(
-                        onPressed: () {
-                          ph.draw();
-                        },
-                        icon: Icon(Icons.play_arrow),
-                        label: Text('Hit')),
-                    RaisedButton.icon(
-                        onPressed: () {
-                          ph.done = true;
-                          dh.play();
-                        },
-                        icon: Icon(Icons.stop),
-                        label: Text('Stand'))
-                  ]);
-                } else {
-                  buttons.add(RaisedButton.icon(
-                      onPressed: () => setState(() {}),
-                      icon: Icon(Icons.refresh),
-                      label: Text('Restart')));
-                }
-                return Column(
-                  children: buttons
-                      .map((e) => SizedBox(
-                            child: e,
-                            width: _width,
-                          ))
-                      .toList(),
-                );
-              },
-            )
-          ],
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.green,
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                children: [
+                  Text('Dealer hand'),
+                  Consumer<DealerHand>(
+                    builder: (context, hand, child) => HandVisualizer(hand),
+                  )
+                ],
+              ),
+              Column(
+                children: [
+                  Text('Player hand'),
+                  Consumer<PlayerHand>(
+                    builder: (context, hand, child) => HandVisualizer(hand),
+                  )
+                ],
+              ),
+              Consumer<GameState>(builder: (context, gs, child) {
+                if (gs == GameState.PLAYER_WON) {
+                  return Text('Player won');
+                } else if (gs == GameState.DEALER_WON) {
+                  return Text('Dealer won');
+                } else if (gs == GameState.EQUAL) {
+                  return Text('Draw');
+                } else
+                  return Container();
+              }),
+              Consumer3<GameState, PlayerHand, DealerHand>(
+                builder: (context, gs, ph, dh, _) {
+                  var buttons = <Widget>[];
+                  if (gs == GameState.PLAY) {
+                    buttons.addAll([
+                      RaisedButton.icon(
+                          onPressed: ph.length == 2
+                              ? () async {
+                                  ph.draw();
+                                  await Future.delayed(
+                                      Duration(milliseconds: 500));
+                                  dh.play();
+                                }
+                              : null,
+                          icon: Icon(Icons.arrow_upward),
+                          label: Text('Double'.toUpperCase())),
+                      RaisedButton.icon(
+                          onPressed: () {
+                            ph.draw();
+                          },
+                          icon: Icon(Icons.play_circle_outline),
+                          label: Text('Hit'.toUpperCase())),
+                      RaisedButton.icon(
+                          onPressed: () {
+                            ph.done = true;
+                            dh.play();
+                          },
+                          icon: Icon(Icons.stop),
+                          label: Text('Stand'.toUpperCase()))
+                    ]);
+                  } else {
+                    buttons.add(RaisedButton.icon(
+                        onPressed: () => setState(() {}),
+                        icon: Icon(Icons.refresh),
+                        label: Text('Restart')));
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: buttons
+                          .map((e) => SizedBox(
+                                child: e,
+                                width: _width,
+                              ))
+                          .toList(),
+                    ),
+                  );
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
